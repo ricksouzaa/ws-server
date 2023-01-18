@@ -32,19 +32,9 @@ export class AppGateway
     );
   }
 
-  @SubscribeMessage('status')
-  status(
-    @ConnectedSocket() client: Socket,
-    @MessageBody() payload: Message,
-  ): void {
-    const { domain } = payload;
+  @SubscribeMessage('notify')
+  status(@ConnectedSocket() client: Socket, @MessageBody() payload: any): void {
     console.log(client.nsp.name, client.id, payload);
-    this.server.emit(domain, payload);
+    this.server.emit(client.nsp.name, payload);
   }
-}
-
-export interface Message {
-  domain: string;
-  order: number;
-  status: string;
 }
